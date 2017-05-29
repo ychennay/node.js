@@ -1,8 +1,8 @@
-const request = require('request');
-var constants = require('../playground/constants');
+const yargs = require('yargs');
 var express = require('express');
 var passport = require('passport');
 var express = require('express');
+var googleMaps = require('./googlemaps/maps');
 var altauth = require(__dirname + '/altauth');
 
 // Express app setup
@@ -11,7 +11,6 @@ var router = express.Router();
 
 // This is the passport middlewae function that get called first
 var auth = altauth.auth;
-
 
 // Setup the route with basic authentication
 router.get('/private',auth,function(req, res){
@@ -25,16 +24,27 @@ app.listen(3000);
 
 console.log('Listening on 3000');
 
-console.log(constants.googleMaps + "?address=10506%20eastborne%20avenue");
-request({
-    url: constants.googleMaps + "?address=10506%20eastborne%20avenue",
-    json: true
 
-}, (error, response, body) => {
-    console.log(`House Number: ${body.results[0].address_components[0].long_name}`);
-    console.log(`Address : ${body.results[0].address_components[1].long_name}`);
-    console.log(`Latitude : ${body.results[0].geometry.location.lat}`);
-    console.log(`Longitude: ${body.results[0].geometry.location.lng}`);
+const argv = yargs
+    .options({
+        a: {
+            demand: true,
+            alias: 'address',
+            describe: 'Address to fetch weather for',
+            string: true 
+            //always parse the address value as a string
+        }
+    })
+    .help()
+    .alias('help', 'h')
+    .argv;
 
+googleMaps.geocodeAddress(argv.address, (errorMessage, results) =>{
+    if (errorMessage){
+        console.log(errorMessage);
+    } else {
+        console.log(JSON.stringify(results, undefined, 2));
+    }
 });
+
 
