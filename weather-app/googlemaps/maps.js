@@ -6,10 +6,9 @@ var geocodeAddress = (address, callback) =>{
     console.log(constants.googleMaps + encodedAddress);
     request({
     url: constants.googleMaps + encodedAddress,
-    json: true
-
-}, (error, response, body) => {
-
+    json: true},
+    
+     (error, response, body) => {
     if(error){
         callback("Unable to connect to Google Maps API.")
     }
@@ -24,12 +23,10 @@ var geocodeAddress = (address, callback) =>{
         });
     }
     else{
-        console.log("An error occured: " + body.statusS);
+        console.log("An error occured: " + body.status);
     }
     }
-    
 );
-
     
 }
 

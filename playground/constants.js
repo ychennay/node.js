@@ -4,4 +4,4 @@ function define(name, value){
     enumerable: true});
 }
 
-define("googleMaps", 'https://maps.googleapis.com/maps/api/geocode/json');
+define("googleMaps", 'https://maps.googleapis.com/maps/api/geocode/json?address=');
