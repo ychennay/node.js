@@ -4,8 +4,10 @@ var passport = require('passport');
 var express = require('express');
 var googleMaps = require('./googlemaps/maps');
 var altauth = require(__dirname + '/altauth');
+var axios = require('axios');
 const request = require('request');
 const weather = require('./weather/weather');
+
 
 // Express app setup
 var app = express();
@@ -40,13 +42,17 @@ const argv = yargs
             alias: 'latlong',
             describe: 'Latitude and longitude of location to fetch weather for',
             string: true
-        }
+        },
+        o: {demand: false,
+            alias: 'option',
+            describe: 'Option to run either Axios or Request geocoding...',
+            string: true}
     })
     .help()
     .alias('help', 'h')
     .argv;
-var latitude = 2;
-var longitude = 2;
+
+if (argv.o === 'normal' || argv.o === 'all'){
 googleMaps.geocodeAddress(argv.address, (errorMessage, results) =>{
     if (errorMessage){
         console.log(errorMessage);
@@ -63,5 +69,24 @@ googleMaps.geocodeAddress(argv.address, (errorMessage, results) =>{
 });
     }
 });
-console.log("Hello " + latitude);
+}
 
+
+if (argv.o === 'axios'){
+console.log(`You selected the ${argv.o} options. ONLY Axios is being run!`);
+var encodedURL = encodeURIComponent(argv.address);
+console.log("Address: ", encodedURL);
+var alternateEndpoint = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedURL}`;
+
+axios.get(alternateEndpoint)
+  .then(function (response) {
+      console.log("What address? ", alternateEndpoint);
+      console.log("Success: ", response.data);
+  //  console.log(response);
+  })
+  .catch(function (error) {
+    console.log("Error: ", error);
+  });
+}
+  
+  console.log("Axios #2:");
