@@ -5,6 +5,7 @@ var express = require('express');
 var googleMaps = require('./googlemaps/maps');
 var altauth = require(__dirname + '/altauth');
 var axios = require('axios');
+var url = require('url');
 const request = require('request');
 const weather = require('./weather/weather');
 
@@ -22,10 +23,15 @@ router.get('/private',auth,function(req, res){
     res.send('Access granted to private resource!!!')
 });
 
+router.get('/response',auth,function(req, res){
+    console.log("received a call from Google ");
+    var queryData = url.parse(req.url, true);
+    var code = queryData.path.slice(15);
+    console.log("Code is " + code);
+});
+
 app.use(router);
-
 app.listen(3000);
-
 console.log('Listening on 3000');
 
 const argv = yargs
