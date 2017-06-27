@@ -3,6 +3,8 @@ const hbs = require('hbs');
 
 var app = express();
 app.set('view engine', 'hbs');
+console.log(__dirname + '/../views');
+app.set('views', __dirname + '/../views');
 
 app.use(express.static(__dirname + '/public'));
 
@@ -19,9 +21,12 @@ res.render('about.hbs',{
     currentDay: new Date().getDate(),
     currentYear: new Date().getFullYear(),
     pageTitle: 'About Us'
-
-
 });
 });
+
+app.use((req, res, next) =>{
+    res.render('maintenance.hbs');
+});
+
 
 app.listen(3000);

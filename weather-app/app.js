@@ -6,9 +6,13 @@ var googleMaps = require('./googlemaps/maps');
 var altauth = require(__dirname + '/altauth');
 var axios = require('axios');
 var url = require('url');
+var fs = require('fs');
+
 const request = require('request');
 const weather = require('./weather/weather');
 
+const SERVER_PORT = '3000'
+const BASE_URL = '127.0.0.1' + ':' + SERVER_PORT;
 
 // Express app setup
 var app = express();
@@ -30,9 +34,25 @@ router.get('/response',auth,function(req, res){
     console.log("Code is " + code);
 });
 
-app.use(router);
-app.listen(3000);
+
+app.listen(parseInt(SERVER_PORT));
 console.log('Listening on 3000');
+
+
+app.use((req, res, next) => {
+    var now = new Date().toString();
+    var log = (`${now}: ${req.method} 
+    request logged for ${BASE_URL}${req.url}`);
+    fs.appendFile('server.log', log + '\n', (err) =>{
+        if (err){
+            console.log('Unable to append text to server.log');
+        }
+    })
+    next();
+});
+app.use(router);
+
+
 
 const argv = yargs
     .options({
