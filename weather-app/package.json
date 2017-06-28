@@ -9,12 +9,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bug-killer": "^4.4.4",
     "express": "^4.15.3",
     "google-auth-library": "^0.10.0",
     "googleapis": "^19.0.0",
+    "lien": "^3.0.4",
+    "opn": "^5.1.0",
     "passport": "^0.3.2",
     "passport-http": "^0.3.0",
+    "pretty-bytes": "^4.0.2",
+    "r-json": "^1.2.7",
     "request": "^2.81.0",
-    "yargs": "^8.0.1"
+    "yargs": "^8.0.1",
+    "youtube-api": "^2.0.8"
   }
 }
