@@ -8,6 +8,8 @@ const prettyBytes = require("pretty-bytes");
 
 const CREDENTIALS = readJson(`${__dirname}/credentials.json`);
 
+module.exports = function () {
+
 // initialize Lien server
 let server = new Lien({
     host: "localhost",
@@ -35,6 +37,7 @@ server.addPage("/response", lien => {
             return Logger.log(err);
         }
         Logger.log("Got the tokens");
+        Logger.log(tokens);
         oauth.setCredentials(tokens);
         lien.end("The video is being uploaded.");
         var req = Youtube.videos.insert({
@@ -58,3 +61,5 @@ server.addPage("/response", lien => {
         }, 250);
     });
 });
+
+}
