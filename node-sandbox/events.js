@@ -20,10 +20,23 @@ class Timer extends EventEmitter{
 }
 
 timer = new Timer();
-timer.on('data', ()=>{console.log("Data received")});
+timer.on('data', (data)=>{
+    console.log("Data received");
+    console.log(`Length: ${data.length}`);
+
+});
 timer.on('end', ()=>{console.log("Done")});
 timer.on('begin', ()=>{console.log("Begin")});
-timer.on('error', ()=>{console.log("Error is happening.")});
 
+// if we do not handle the error event with a listener, the node process
+// exit completely. Check this by uncommenting the line below to see what
+// happens: the second (successful) timeIt call will never be executed.
+//timer.on('error', ()=>{console.log("Error is happening.")});
 
-timer.timeIt(fs.readFile, "mk");
+process.on('uncaughtException', (err)=>{
+    console.log(`This is my error: ${err}`);  
+    process.exit(1);
+})
+
+timer.timeIt(fs.readFile, "as");
+timer.timeIt(fs.readFile, __filename);
